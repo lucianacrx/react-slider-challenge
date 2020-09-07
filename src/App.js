@@ -42,7 +42,7 @@ class App extends Component {
       title: 'Catalog Viewer',
       catalogs: [...catalogs],
       currentIndex: -1,
-      catalogSelected: catalogs[3],
+      catalogSelected: catalogs[0],
       slideActive: false,
       slideTimer: null,
       slideDuration: 3000,
@@ -53,22 +53,57 @@ class App extends Component {
     this.slideChange = this.slideChange.bind(this);
     this.resetSlideTimer = this.resetSlideTimer.bind(this);
     this.onSlideChange = this.onSlideChange.bind(this);
+    var interval;
   }
 
   selectedCatalog(index) {
-
+    
   }
 
   previousClick() {
+    const lastIndex = this.state.catalogs.length - 1;
+    var newIndex = 0;
 
+    if (this.state.currentIndex === lastIndex) {
+      newIndex = 0;
+    } else {
+      newIndex = this.state.currentIndex - 1;
+    }
+
+    this.setState({
+      currentIndex: newIndex,
+      catalogSelected: this.state.catalogs[newIndex]
+    });
   }
 
   nextClick() {
+    const lastIndex = this.state.catalogs.length - 1;
+    var newIndex = 0;
 
+    if (this.state.currentIndex === lastIndex) {
+      newIndex = 0;
+    } else {
+      newIndex = this.state.currentIndex + 1;
+    }
+
+    this.setState({
+      currentIndex: newIndex,
+      catalogSelected: this.state.catalogs[newIndex]
+    });
+  }
+
+  startSlideChange() {
+    this.interval = setInterval(() => {
+      this.nextClick();
+    }, 3000);
   }
 
   slideChange(event) {
-
+    if (event.target.checked) {
+      this.startSlideChange();
+    } else {
+      clearInterval(this.interval);
+    }
   }
 
   resetSlideTimer(isActive = false) {
@@ -76,7 +111,7 @@ class App extends Component {
   }
 
   onSlideChange() {
-
+    
   }
 
   render() {
@@ -102,7 +137,7 @@ class App extends Component {
             </div>
 
             <div className="slide-input">
-              <input type="checkbox" onChange={this.slideChange} className="test" data-testid="slide"/> Slide
+              <input type="checkbox" onChange={e => this.slideChange(e)} className="test" data-testid="slide"/> Slide
             </div>
           </div>
         </Fragment>

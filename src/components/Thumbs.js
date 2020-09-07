@@ -8,7 +8,7 @@ class Thumbs extends Component {
     }
 
     onImageSelect(event) {
-
+        
     }
 
   render() {
