@@ -10,7 +10,7 @@ class Viewer extends Component {
   render() {
     return (
         <div className="catalog-view">
-          <img data-testid="catalog-view" className="catalog-image" src={this.props.catalog}/>
+          <img data-testid="catalog-view" alt="" className="catalog-image" src={this.props.catalog}/>
         </div>
     );
   }

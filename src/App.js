@@ -41,39 +41,40 @@ class App extends Component {
     this.state = {
       title: 'Catalog Viewer',
       catalogs: [...catalogs],
-      currentIndex: -1,
+      currentIndex: 0,
       catalogSelected: catalogs[0],
       slideActive: false,
       slideTimer: null,
       slideDuration: 3000,
     };
+
     this.selectedCatalog = this.selectedCatalog.bind(this);
     this.previousClick = this.previousClick.bind(this);
     this.nextClick = this.nextClick.bind(this);
     this.slideChange = this.slideChange.bind(this);
     this.resetSlideTimer = this.resetSlideTimer.bind(this);
     this.onSlideChange = this.onSlideChange.bind(this);
-    var interval;
+    this.interval;
   }
 
   selectedCatalog(index) {
-    
+    this.setState({
+      currentIndex: index,
+      catalogSelected: this.state.catalogs[index]
+    });
   }
 
   previousClick() {
     const lastIndex = this.state.catalogs.length - 1;
     var newIndex = 0;
 
-    if (this.state.currentIndex === lastIndex) {
-      newIndex = 0;
+    if (this.state.currentIndex === 0) {
+      newIndex = lastIndex;
     } else {
       newIndex = this.state.currentIndex - 1;
     }
 
-    this.setState({
-      currentIndex: newIndex,
-      catalogSelected: this.state.catalogs[newIndex]
-    });
+    this.selectedCatalog(newIndex);
   }
 
   nextClick() {
@@ -86,28 +87,27 @@ class App extends Component {
       newIndex = this.state.currentIndex + 1;
     }
 
-    this.setState({
-      currentIndex: newIndex,
-      catalogSelected: this.state.catalogs[newIndex]
-    });
+    this.selectedCatalog(newIndex);
   }
 
   startSlideChange() {
     this.interval = setInterval(() => {
       this.nextClick();
-    }, 3000);
+    }, this.state.slideDuration);
   }
 
   slideChange(event) {
-    if (event.target.checked) {
+    const value = event.target.checked;
+    this.setState({slideActive: value});
+    if (value) {
       this.startSlideChange();
     } else {
-      clearInterval(this.interval);
+     this.resetSlideTimer(value);
     }
   }
 
   resetSlideTimer(isActive = false) {
-
+    clearInterval(this.interval);
   }
 
   onSlideChange() {
@@ -128,10 +128,10 @@ class App extends Component {
             </div>
             <div className="catalog-items">
               <div className="previous" onClick={this.previousClick} data-testid="prev-icon">
-                <img src={previousIcon}/>
+                <img src={previousIcon} alt="previous"/>
               </div>
               <div className="next" onClick={this.nextClick} data-testid="next-icon">
-                <img src={nextIcon}/>
+                <img src={nextIcon} alt="next"/>
               </div>
               <Thumbs items={this.state.catalogs} currentIndex={this.state.currentIndex} selectedCatalog={this.selectedCatalog}/>
             </div>
